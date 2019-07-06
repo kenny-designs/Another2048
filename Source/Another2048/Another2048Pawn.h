@@ -21,8 +21,6 @@ public:
 
 protected:
 	void OnResetVR();
-	void TriggerClick();
-	void TraceForBlock(const FVector& Start, const FVector& End, bool bDrawDebugHelpers);
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	class ABlock* CurrentBlockFocus;

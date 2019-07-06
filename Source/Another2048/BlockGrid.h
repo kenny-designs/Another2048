@@ -16,10 +16,6 @@ class ABlockGrid : public AActor
 	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* DummyRoot;
 
-	/** Text component for the score */
-	UPROPERTY(Category = Grid, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UTextRenderComponent* ScoreText;
-
 public:
 	ABlockGrid();
 
@@ -40,14 +36,8 @@ protected:
 	// End AActor interface
 
 public:
-
-	/** Handle the block being clicked */
-	void AddScore();
-
 	/** Returns DummyRoot subobject **/
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
-	/** Returns ScoreText subobject **/
-	FORCEINLINE class UTextRenderComponent* GetScoreText() const { return ScoreText; }
 };
 
 

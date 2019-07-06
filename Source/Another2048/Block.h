@@ -30,29 +30,9 @@ public:
 	UPROPERTY()
 	class UMaterial* BaseMaterial;
 
-	/** Pointer to blue material used on inactive blocks */
-	UPROPERTY()
-	class UMaterialInstance* BlueMaterial;
-
-	/** Pointer to orange material used on active blocks */
-	UPROPERTY()
-	class UMaterialInstance* OrangeMaterial;
-
 	/** Grid that owns us */
 	UPROPERTY()
 	class ABlockGrid* OwningGrid;
-
-	/** Handle the block being clicked */
-	UFUNCTION()
-	void BlockClicked(UPrimitiveComponent* ClickedComp, FKey ButtonClicked);
-
-	/** Handle the block being touched  */
-	UFUNCTION()
-	void OnFingerPressedBlock(ETouchIndex::Type FingerIndex, UPrimitiveComponent* TouchedComponent);
-
-	void HandleClicked();
-
-	void Highlight(bool bOn);
 
 public:
 	/** Returns DummyRoot subobject **/
