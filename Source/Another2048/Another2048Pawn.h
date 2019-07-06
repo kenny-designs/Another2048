@@ -22,6 +22,12 @@ public:
 protected:
 	void OnResetVR();
 
+	// Player input
+	void OnShiftBlocksLeft();
+	void OnShiftBlocksRight();
+	void OnShiftBlocksUp();
+	void OnShiftBlocksDown();
+
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	class ABlock* CurrentBlockFocus;
 };
