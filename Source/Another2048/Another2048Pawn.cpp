@@ -1,12 +1,9 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "Another2048Pawn.h"
-#include "Block.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
-#include "Camera/CameraComponent.h"
+#include "BlockGrid.h"
 #include "GameFramework/PlayerController.h"
-#include "Engine/World.h"
-#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
 
 AAnother2048Pawn::AAnother2048Pawn(const FObjectInitializer& ObjectInitializer) 
 	: Super(ObjectInitializer)
@@ -14,25 +11,16 @@ AAnother2048Pawn::AAnother2048Pawn(const FObjectInitializer& ObjectInitializer)
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
-void AAnother2048Pawn::Tick(float DeltaSeconds)
+void AAnother2048Pawn::BeginPlay()
 {
-	Super::Tick(DeltaSeconds);
+	Super::BeginPlay();
 
-	if (APlayerController* PC = Cast<APlayerController>(GetController()))
-	{
-		// Utilize VR headset if enabled
-		if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled())
-		{
-			// TODO: Remove if support dropped for VR
-		}
-	}
+	FindBlockGridInScene();
 }
 
 void AAnother2048Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAction("OnResetVR", EInputEvent::IE_Pressed, this, &AAnother2048Pawn::OnResetVR);
 
 	// Bind block movement input
 	// TODO: This works but perhaps could be cleaned up. Refactor
@@ -42,34 +30,14 @@ void AAnother2048Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("ShiftBlocksDown", EInputEvent::IE_Pressed, this, &AAnother2048Pawn::OnShiftBlocksDown);
 }
 
-void AAnother2048Pawn::CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult)
-{
-	Super::CalcCamera(DeltaTime, OutResult);
+void AAnother2048Pawn::OnShiftBlocksLeft()  { BlockGrid->MoveGridBlocks(EBlockGridMoveDirection::Left); }
+void AAnother2048Pawn::OnShiftBlocksRight() { BlockGrid->MoveGridBlocks(EBlockGridMoveDirection::Right); }
+void AAnother2048Pawn::OnShiftBlocksUp()    { BlockGrid->MoveGridBlocks(EBlockGridMoveDirection::Up); }
+void AAnother2048Pawn::OnShiftBlocksDown()  { BlockGrid->MoveGridBlocks(EBlockGridMoveDirection::Down); }
 
-	OutResult.Rotation = FRotator(-90.0f, -90.0f, 0.0f);
-}
-
-void AAnother2048Pawn::OnResetVR()
+void AAnother2048Pawn::FindBlockGridInScene()
 {
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
-
-void AAnother2048Pawn::OnShiftBlocksLeft()
-{
-	UE_LOG(LogTemp, Warning, TEXT("shifted left"));
-}
-
-void AAnother2048Pawn::OnShiftBlocksRight()
-{
-	UE_LOG(LogTemp, Warning, TEXT("shifted right"));
-}
-
-void AAnother2048Pawn::OnShiftBlocksUp()
-{
-	UE_LOG(LogTemp, Warning, TEXT("shifted up"));
-}
-
-void AAnother2048Pawn::OnShiftBlocksDown()
-{
-	UE_LOG(LogTemp, Warning, TEXT("shifted down"));
+	TArray<AActor*> FoundBlockGrid;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABlockGrid::StaticClass(), FoundBlockGrid);
+	BlockGrid = Cast<ABlockGrid>(FoundBlockGrid.Pop());
 }

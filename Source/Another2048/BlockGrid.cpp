@@ -19,7 +19,6 @@ ABlockGrid::ABlockGrid()
 	BlockSpacing = 300.f;
 }
 
-
 void ABlockGrid::BeginPlay()
 {
 	Super::BeginPlay();
@@ -44,6 +43,25 @@ void ABlockGrid::BeginPlay()
 		{
 			NewBlock->OwningGrid = this;
 		}
+	}
+}
+
+void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
+{
+	switch (EDirection)
+	{
+	case EBlockGridMoveDirection::Left:
+		UE_LOG(LogTemp, Warning, TEXT("lefts"));
+		break;
+	case EBlockGridMoveDirection::Right:
+		UE_LOG(LogTemp, Warning, TEXT("rights"));
+		break;
+	case EBlockGridMoveDirection::Up:
+		UE_LOG(LogTemp, Warning, TEXT("ups"));
+		break;
+	case EBlockGridMoveDirection::Down:
+		UE_LOG(LogTemp, Warning, TEXT("downs"));
+		break;
 	}
 }
 

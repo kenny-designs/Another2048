@@ -6,6 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "BlockGrid.generated.h"
 
+UENUM()
+enum class EBlockGridMoveDirection : uint8
+{
+	Left,
+	Right,
+	Up,
+	Down
+};
+
 /** Class used to spawn blocks and manage score */
 UCLASS(minimalapi)
 class ABlockGrid : public AActor
@@ -18,6 +27,8 @@ class ABlockGrid : public AActor
 
 public:
 	ABlockGrid();
+
+	void MoveGridBlocks(EBlockGridMoveDirection EDirection);
 
 	/** How many blocks have been clicked */
 	int32 Score;

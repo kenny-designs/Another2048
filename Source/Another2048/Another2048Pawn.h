@@ -6,22 +6,19 @@
 #include "GameFramework/Pawn.h"
 #include "Another2048Pawn.generated.h"
 
+class ABlockGrid;
+
 UCLASS(config=Game)
 class AAnother2048Pawn : public APawn
 {
 	GENERATED_UCLASS_BODY()
 
 public:
-
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	virtual void CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult) override;
-
 protected:
-	void OnResetVR();
-
 	// Player input
 	void OnShiftBlocksLeft();
 	void OnShiftBlocksRight();
@@ -29,5 +26,8 @@ protected:
 	void OnShiftBlocksDown();
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
-	class ABlock* CurrentBlockFocus;
+	ABlockGrid* BlockGrid = nullptr;
+
+private:
+	void FindBlockGridInScene();
 };
