@@ -3,7 +3,6 @@
 #include "BlockGrid.h"
 #include "Block.h"
 #include "Slot.h"
-#include "Components/TextRenderComponent.h"
 #include "Engine/World.h"
 
 ABlockGrid::ABlockGrid()
@@ -75,6 +74,7 @@ void ABlockGrid::SpawnAllGridSlots()
 
 void ABlockGrid::ShiftBlocksLeft()
 {
+	UE_LOG(LogTemp, Warning, TEXT("lefts"));
 	for (int32 Index = 1; Index < Grid.Num(); ++Index)
 	{
 		if (Grid[Index] && !Grid[Index-1])
@@ -83,6 +83,21 @@ void ABlockGrid::ShiftBlocksLeft()
 			Grid[Index] = nullptr;
 		}
 	}
+}
+
+void ABlockGrid::ShiftBlocksRight()
+{
+	UE_LOG(LogTemp, Warning, TEXT("rights"));
+}
+
+void ABlockGrid::ShiftBlocksUp()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ups"));
+}
+
+void ABlockGrid::ShiftBlocksDown()
+{
+	UE_LOG(LogTemp, Warning, TEXT("downs"));
 }
 
 void ABlockGrid::UpdateAllBlockPositions()
@@ -122,17 +137,16 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 	switch (EDirection)
 	{
 	case EBlockGridMoveDirection::Left:
-		UE_LOG(LogTemp, Warning, TEXT("lefts"));
 		ShiftBlocksLeft();
 		break;
 	case EBlockGridMoveDirection::Right:
-		UE_LOG(LogTemp, Warning, TEXT("rights"));
+		ShiftBlocksRight();
 		break;
 	case EBlockGridMoveDirection::Up:
-		UE_LOG(LogTemp, Warning, TEXT("ups"));
+		ShiftBlocksUp();
 		break;
 	case EBlockGridMoveDirection::Down:
-		UE_LOG(LogTemp, Warning, TEXT("downs"));
+		ShiftBlocksDown();
 		break;
 	}
 
