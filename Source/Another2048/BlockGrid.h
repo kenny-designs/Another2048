@@ -57,6 +57,12 @@ private:
 	/** Populate playfield with slots to visually form a grid */
 	void SpawnAllGridSlots();
 
+	/** Shift all blocks to the left side of the playfield */
+	void ShiftBlocksLeft();
+
+	/** Updates the position of all Blocks to match the Grid TArray */
+	void UpdateAllBlockPositions();
+
 	/** The grid we are playing on **/
 	TArray<class ABlock*> Grid;
 };

@@ -35,7 +35,7 @@ void ABlockGrid::BeginPlay()
 void ABlockGrid::SpawnBlock()
 {
 	// TODO: remove. make more dynamic
-	int32 BlockIndex = 3; // spawning at (3,0)
+	int32 BlockIndex = 15; // spawning at (3,0)
 
 	const float XOffset = (BlockIndex / Size) * BlockSpacing; // Divide by dimension
 	const float YOffset = (BlockIndex % Size) * BlockSpacing; // Modulo gives remainder
@@ -68,13 +68,44 @@ void ABlockGrid::SpawnAllGridSlots()
 	}
 }
 
+void ABlockGrid::ShiftBlocksLeft()
+{
+	for (int32 Index = 0; Index != Grid.Num(); ++Index)
+	{
+		if (Index > 0 && Grid[Index])
+		{
+			Grid[Index - 1] = Grid[Index];
+			Grid[Index] = nullptr;
+		}
+	}
+}
+
+void ABlockGrid::UpdateAllBlockPositions()
+{
+	for (int32 Index = 0; Index != Grid.Num(); ++Index)
+	{
+		if (Grid[Index])
+		{
+			const float XOffset = (Index / Size) * BlockSpacing; // Divide by dimension
+			const float YOffset = (Index % Size) * BlockSpacing; // Modulo gives remainder
+
+			// Make position vector, offset from Grid location
+			const FVector UpdatedLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
+
+			Grid[Index]->SetActorLocation(UpdatedLocation);
+		}
+	}
+}
+
 // TODO: Implement actual grid movement
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
+	// Move blocks
 	switch (EDirection)
 	{
 	case EBlockGridMoveDirection::Left:
 		UE_LOG(LogTemp, Warning, TEXT("lefts"));
+		ShiftBlocksLeft();
 		break;
 	case EBlockGridMoveDirection::Right:
 		UE_LOG(LogTemp, Warning, TEXT("rights"));
@@ -86,4 +117,7 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 		UE_LOG(LogTemp, Warning, TEXT("downs"));
 		break;
 	}
+
+	// Update all blocks world positions
+	UpdateAllBlockPositions();
 }
