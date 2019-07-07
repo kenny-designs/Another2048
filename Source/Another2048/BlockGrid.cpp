@@ -15,6 +15,7 @@ ABlockGrid::ABlockGrid()
 	// Set defaults
 	Size = 4;
 	BlockSpacing = 300.f;
+	bIsGameOver = false;
 }
 
 void ABlockGrid::BeginPlay()
@@ -28,14 +29,18 @@ void ABlockGrid::BeginPlay()
 	Grid.Init(nullptr, NumBlocks);
 
 	// Setup playfield
-	SpawnBlock();
+	SpawnBlockAtRandomLocation();
 	SpawnAllGridSlots();
 }
 
-void ABlockGrid::SpawnBlock()
+void ABlockGrid::SpawnBlockAtRandomLocation()
 {
-	// TODO: remove. make more dynamic
-	int32 BlockIndex = 15; // spawning at (3,0)
+	// Find a suitable spot to spawn the block
+	int32 BlockIndex = 0;
+	do
+	{
+		BlockIndex = FMath::RandHelper(Size*Size);
+	} while (Grid[BlockIndex]);
 
 	const float XOffset = (BlockIndex / Size) * BlockSpacing; // Divide by dimension
 	const float YOffset = (BlockIndex % Size) * BlockSpacing; // Modulo gives remainder
@@ -47,7 +52,7 @@ void ABlockGrid::SpawnBlock()
 	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0, 0, 0));
 
 	// Add block to Grid TArray
-	Grid.Insert(NewBlock, BlockIndex);
+	Grid[BlockIndex] = NewBlock;
 }
 
 void ABlockGrid::SpawnAllGridSlots()
@@ -70,9 +75,9 @@ void ABlockGrid::SpawnAllGridSlots()
 
 void ABlockGrid::ShiftBlocksLeft()
 {
-	for (int32 Index = 0; Index != Grid.Num(); ++Index)
+	for (int32 Index = 1; Index < Grid.Num(); ++Index)
 	{
-		if (Index > 0 && Grid[Index])
+		if (Grid[Index] && !Grid[Index-1])
 		{
 			Grid[Index - 1] = Grid[Index];
 			Grid[Index] = nullptr;
@@ -97,9 +102,22 @@ void ABlockGrid::UpdateAllBlockPositions()
 	}
 }
 
+bool ABlockGrid::bGridIsFull()
+{
+	for (ABlock* Block : Grid)
+	{
+		if (Block == nullptr) { return false; }
+	}
+	return true;
+}
+
 // TODO: Implement actual grid movement
+// TODO: Remove UE_LOGs
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
+	// Return if no more moves can be made
+	if (bIsGameOver) { return; }
+
 	// Move blocks
 	switch (EDirection)
 	{
@@ -120,4 +138,16 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 
 	// Update all blocks world positions
 	UpdateAllBlockPositions();
+
+	// Spawn new block if able
+	if (!bGridIsFull())
+	{
+		SpawnBlockAtRandomLocation();
+	}
+	// Otherwise, game over
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("G A M E O V E R ! ! !"));
+		bIsGameOver = true;
+	}
 }
