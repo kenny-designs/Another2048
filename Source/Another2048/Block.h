@@ -16,29 +16,29 @@ class ABlock : public AActor
 	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* DummyRoot;
 
-	/** StaticMesh component for the clickable block */
+	/** StaticMesh component */
 	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* BlockMesh;
+
+	/** Text component for the score */
+	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UTextRenderComponent* BlockValueLabel;
 
 public:
 	ABlock();
 
-	/** Are we currently active? */
-	bool bIsActive;
-
-	/** Pointer to white material used on the focused block */
+	/** Basic white material for the block **/
 	UPROPERTY()
 	class UMaterial* BaseMaterial;
 
-	/** Grid that owns us */
-	UPROPERTY()
-	class ABlockGrid* OwningGrid;
-
-public:
 	/** Returns DummyRoot subobject **/
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
 	/** Returns BlockMesh subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetBlockMesh() const { return BlockMesh; }
+
+private:
+	/** The block's current value. Defaults to 2 **/
+	int32 BlockValue = 2;
 };
 
 

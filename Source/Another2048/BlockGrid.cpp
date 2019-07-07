@@ -6,8 +6,6 @@
 #include "Components/TextRenderComponent.h"
 #include "Engine/World.h"
 
-#define LOCTEXT_NAMESPACE "PuzzleBlockGrid"
-
 ABlockGrid::ABlockGrid()
 {
 	// Create dummy root scene component
@@ -37,15 +35,10 @@ void ABlockGrid::BeginPlay()
 
 		// Spawn a block
 		ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0,0,0));
-
-		// Tell the block about its owner
-		if (NewBlock != nullptr)
-		{
-			NewBlock->OwningGrid = this;
-		}
 	}
 }
 
+// TODO: Implement actual grid movement
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
 	switch (EDirection)
@@ -64,5 +57,3 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 		break;
 	}
 }
-
-#undef LOCTEXT_NAMESPACE

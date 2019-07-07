@@ -2,11 +2,14 @@
 
 
 #include "Block.h"
-#include "BlockGrid.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
+#include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstance.h"
+
+
+#define LOCTEXT_NAMESPACE "PuzzleBlock"
 
 ABlock::ABlock()
 {
@@ -35,6 +38,20 @@ ABlock::ABlock()
 	BlockMesh->SetMaterial(0, ConstructorStatics.BaseMaterial.Get());
 	BlockMesh->SetupAttachment(DummyRoot);
 
+	// Create text render component
+	BlockValueLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("BlockValue0"));
+	BlockValueLabel->SetRelativeRotation(FRotator(90.f, 180.f, 0.f));
+	BlockValueLabel->SetRelativeLocation(FVector(0.f, 0.f, 75.f));
+	BlockValueLabel->SetHorizontalAlignment(EHorizTextAligment::EHTA_Center);
+	BlockValueLabel->SetVerticalAlignment(EVerticalTextAligment::EVRTA_TextCenter);
+	BlockValueLabel->SetTextRenderColor(FColor::Black);
+	BlockValueLabel->SetXScale(4.f);
+	BlockValueLabel->SetYScale(4.f);
+	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
+	BlockValueLabel->SetupAttachment(DummyRoot);
+
 	// Save a pointer to the orange material
 	BaseMaterial = ConstructorStatics.BaseMaterial.Get();
 }
+
+#undef LOCTEXT_NAMESPACE
