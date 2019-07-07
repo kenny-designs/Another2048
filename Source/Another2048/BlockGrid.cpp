@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BlockGrid.h"
 #include "Block.h"
+#include "Slot.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/SphereComponent.h"
 #include "Engine/World.h"
 
 ABlockGrid::ABlockGrid()
@@ -30,7 +31,6 @@ void ABlockGrid::BeginPlay()
 	SpawnBlock();
 
 	// Loop to spawn each block
-	/*
 	for(int32 BlockIndex=0; BlockIndex<NumBlocks; BlockIndex++)
 	{
 		const float XOffset = (BlockIndex/Size) * BlockSpacing; // Divide by dimension
@@ -39,10 +39,9 @@ void ABlockGrid::BeginPlay()
 		// Make position vector, offset from Grid location
 		const FVector BlockLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
 
-		// Spawn a block
-		ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0,0,0));
+		// Spawn grid slot
+		SpawnGridSlot(BlockLocation);
 	}
-	*/
 }
 
 void ABlockGrid::SpawnBlock()
@@ -61,6 +60,11 @@ void ABlockGrid::SpawnBlock()
 
 	// Add block to Grid
 	Grid.Insert(NewBlock, BlockIndex);
+}
+
+void ABlockGrid::SpawnGridSlot(FVector SpawnLocation)
+{
+	GetWorld()->SpawnActor<ASlot>(Slot, SpawnLocation, FRotator(0, 0, 0));
 }
 
 // TODO: Implement actual grid movement

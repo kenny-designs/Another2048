@@ -38,6 +38,10 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
+	/*Blueprint Reference of UsefulActor class*/
+	UPROPERTY(Category=Grid, EditAnywhere)
+	TSubclassOf<class ASlot> Slot;
+
 	/** Returns DummyRoot subobject **/
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
 
@@ -49,6 +53,9 @@ protected:
 private:
 	/** Spawn block on to the Grid **/
 	void SpawnBlock();
+
+	/** Spawn grid slot at given location **/
+	void SpawnGridSlot(FVector SpawnLocation);
 
 	/** The grid we are playing on **/
 	TArray<class ABlock*> Grid;
