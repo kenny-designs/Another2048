@@ -30,9 +30,6 @@ public:
 
 	void MoveGridBlocks(EBlockGridMoveDirection EDirection);
 
-	/** How many blocks have been clicked */
-	int32 Score;
-
 	/** Number of blocks along each side of grid */
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	int32 Size;
@@ -41,14 +38,20 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
+	/** Returns DummyRoot subobject **/
+	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
+
 protected:
 	// Begin AActor interface
 	virtual void BeginPlay() override;
 	// End AActor interface
 
-public:
-	/** Returns DummyRoot subobject **/
-	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
+private:
+	/** Spawn block on to the Grid **/
+	void SpawnBlock();
+
+	/** The grid we are playing on **/
+	TArray<class ABlock*> Grid;
 };
 
 

@@ -24,7 +24,13 @@ void ABlockGrid::BeginPlay()
 	// Number of blocks
 	const int32 NumBlocks = Size * Size;
 
+	// Create an empty grid of length NumBlocks
+	Grid.Init(nullptr, NumBlocks);
+
+	SpawnBlock();
+
 	// Loop to spawn each block
+	/*
 	for(int32 BlockIndex=0; BlockIndex<NumBlocks; BlockIndex++)
 	{
 		const float XOffset = (BlockIndex/Size) * BlockSpacing; // Divide by dimension
@@ -36,6 +42,25 @@ void ABlockGrid::BeginPlay()
 		// Spawn a block
 		ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0,0,0));
 	}
+	*/
+}
+
+void ABlockGrid::SpawnBlock()
+{
+	// TODO: remove. make more dynamic
+	int32 BlockIndex = 3; // spawning at (3,0)
+
+	const float XOffset = (BlockIndex / Size) * BlockSpacing; // Divide by dimension
+	const float YOffset = (BlockIndex % Size) * BlockSpacing; // Modulo gives remainder
+
+	// Make position vector, offset from Grid location
+	const FVector BlockLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
+
+	// Spawn a block
+	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0, 0, 0));
+
+	// Add block to Grid
+	Grid.Insert(NewBlock, BlockIndex);
 }
 
 // TODO: Implement actual grid movement
