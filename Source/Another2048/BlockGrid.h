@@ -38,7 +38,7 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
-	/*Blueprint Reference of UsefulActor class*/
+	/** Slots used to represent playfield **/
 	UPROPERTY(Category=Grid, EditAnywhere)
 	TSubclassOf<class ASlot> Slot;
 
@@ -54,8 +54,8 @@ private:
 	/** Spawn block on to the Grid **/
 	void SpawnBlock();
 
-	/** Spawn grid slot at given location **/
-	void SpawnGridSlot(FVector SpawnLocation);
+	/** Populate playfield with slots to visually form a grid */
+	void SpawnAllGridSlots();
 
 	/** The grid we are playing on **/
 	TArray<class ABlock*> Grid;

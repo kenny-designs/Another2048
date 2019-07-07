@@ -4,7 +4,6 @@
 #include "Block.h"
 #include "Slot.h"
 #include "Components/TextRenderComponent.h"
-#include "Components/SphereComponent.h"
 #include "Engine/World.h"
 
 ABlockGrid::ABlockGrid()
@@ -28,20 +27,9 @@ void ABlockGrid::BeginPlay()
 	// Create an empty grid of length NumBlocks
 	Grid.Init(nullptr, NumBlocks);
 
+	// Setup playfield
 	SpawnBlock();
-
-	// Loop to spawn each block
-	for(int32 BlockIndex=0; BlockIndex<NumBlocks; BlockIndex++)
-	{
-		const float XOffset = (BlockIndex/Size) * BlockSpacing; // Divide by dimension
-		const float YOffset = (BlockIndex%Size) * BlockSpacing; // Modulo gives remainder
-
-		// Make position vector, offset from Grid location
-		const FVector BlockLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
-
-		// Spawn grid slot
-		SpawnGridSlot(BlockLocation);
-	}
+	SpawnAllGridSlots();
 }
 
 void ABlockGrid::SpawnBlock()
@@ -58,13 +46,26 @@ void ABlockGrid::SpawnBlock()
 	// Spawn a block
 	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0, 0, 0));
 
-	// Add block to Grid
+	// Add block to Grid TArray
 	Grid.Insert(NewBlock, BlockIndex);
 }
 
-void ABlockGrid::SpawnGridSlot(FVector SpawnLocation)
+void ABlockGrid::SpawnAllGridSlots()
 {
-	GetWorld()->SpawnActor<ASlot>(Slot, SpawnLocation, FRotator(0, 0, 0));
+	const int32 TotalSlots = Size * Size;
+
+	// Loop to spawn each slot
+	for(int32 SlotIndex=0; SlotIndex < TotalSlots; SlotIndex++)
+	{
+		const float XOffset = (SlotIndex/Size) * BlockSpacing; // Divide by dimension
+		const float YOffset = (SlotIndex%Size) * BlockSpacing; // Modulo gives remainder
+
+		// Make position vector, offset from Grid location
+		const FVector SpawnLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
+
+		// Spawn grid slot
+		GetWorld()->SpawnActor<ASlot>(Slot, SpawnLocation, FRotator(0, 0, 0));
+	}
 }
 
 // TODO: Implement actual grid movement
