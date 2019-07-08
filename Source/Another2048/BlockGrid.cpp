@@ -65,12 +65,35 @@ void ABlockGrid::SpawnAllGridSlots()
 void ABlockGrid::ShiftBlocksLeft()
 {
 	UE_LOG(LogTemp, Warning, TEXT("lefts"));
+	/*
 	for (int32 Index = 1; Index < Grid.Num(); ++Index)
 	{
 		if (Grid[Index] && !Grid[Index-1])
 		{
 			Grid[Index - 1] = Grid[Index];
 			Grid[Index] = nullptr;
+		}
+	}
+	*/
+
+	// Loop through the entire Grid
+	for (int32 Index = 0; Index < Grid.Num(); ++Index)
+	{
+		// If we encounter a block, shift it as far as it can go to the left
+		if (Grid[Index])
+		{
+			// Find left side index
+			int32 LeftIndex = Index - (Index % Size);
+			for (; LeftIndex < Index; ++LeftIndex)
+			{
+				// Swap
+				if (!Grid[LeftIndex])
+				{
+					Grid[LeftIndex] = Grid[Index];
+					Grid[Index] = nullptr;
+					break;
+				}
+			}
 		}
 	}
 }
@@ -96,6 +119,7 @@ void ABlockGrid::UpdateAllBlockPositions()
 	{
 		if (Grid[Index])
 		{
+			// Move the block
 			const FVector UpdatedLocation = GetGridLocationAtIndex(Index);
 			Grid[Index]->SetActorLocation(UpdatedLocation);
 		}
@@ -110,6 +134,7 @@ FVector ABlockGrid::GetGridLocationAtIndex(int32 Index)
 	return FVector(XOffset, YOffset, 0.f) + GetActorLocation();
 }
 
+// TODO: Could be simplifed using a method from TArray
 bool ABlockGrid::bGridIsFull()
 {
 	for (ABlock* Block : Grid)
