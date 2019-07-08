@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -15,7 +14,28 @@ enum class EBlockGridMoveDirection : uint8
 	Down
 };
 
-/** Class used to spawn blocks and manage score */
+/**
+Manages the grid we are playing 2048 on. It's responsible for moving the blocks, combining them,
+and checking if the game has been won or lost.
+
+The game operates on a single Grid of type TArray<ABlock*> with length Size*Size.
+Visually, the Grid takes on the form depicted by the ASCII art below where each number is the index
+used to access that particular slot. (Assuming Size = 4)
+____________________________
+|      |      |      |      |
+|  12  |  13  |  14  |  15  |
+|______|______|______|______|
+|      |      |      |      |
+|   8  |   9  |  10  |  11  |
+|______|______|______|______|
+|      |      |      |      |
+|   4  |   5  |   6  |   7  |
+|______|______|______|______|
+|      |      |      |      |
+|   0  |   1  |   2  |   3  |
+|______|______|______|______|
+
+*/
 UCLASS(minimalapi)
 class ABlockGrid : public AActor
 {
@@ -65,6 +85,12 @@ private:
 
 	/** Updates the position of all Blocks to match the Grid TArray */
 	void UpdateAllBlockPositions();
+
+	/** 
+	Gets the world location of grid coordinate at specified index
+	i.e. an index of 5 would be coordinate (1, 1)
+	*/
+	//FVector GetGridLocationAtIndex(int32 Index);
 
 	/** Returns true if Grid TArray is full */
 	bool bGridIsFull();
