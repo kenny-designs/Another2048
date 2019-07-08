@@ -41,14 +41,9 @@ void ABlockGrid::SpawnBlockAtRandomLocation()
 		BlockIndex = FMath::RandHelper(Size*Size);
 	} while (Grid[BlockIndex]);
 
-	const float XOffset = (BlockIndex / Size) * BlockSpacing; // Divide by dimension
-	const float YOffset = (BlockIndex % Size) * BlockSpacing; // Modulo gives remainder
-
-	// Make position vector, offset from Grid location
-	const FVector BlockLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
-
 	// Spawn a block
-	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(BlockLocation, FRotator(0, 0, 0));
+	const FVector SpawnLocation = GetGridLocationAtIndex(BlockIndex);
+	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(SpawnLocation, FRotator(0, 0, 0));
 
 	// Add block to Grid TArray
 	Grid[BlockIndex] = NewBlock;
@@ -61,13 +56,8 @@ void ABlockGrid::SpawnAllGridSlots()
 	// Loop to spawn each slot
 	for(int32 SlotIndex=0; SlotIndex < TotalSlots; SlotIndex++)
 	{
-		const float XOffset = (SlotIndex/Size) * BlockSpacing; // Divide by dimension
-		const float YOffset = (SlotIndex%Size) * BlockSpacing; // Modulo gives remainder
-
-		// Make position vector, offset from Grid location
-		const FVector SpawnLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
-
 		// Spawn grid slot
+		const FVector SpawnLocation = GetGridLocationAtIndex(SlotIndex);
 		GetWorld()->SpawnActor<ASlot>(Slot, SpawnLocation, FRotator(0, 0, 0));
 	}
 }
@@ -106,15 +96,18 @@ void ABlockGrid::UpdateAllBlockPositions()
 	{
 		if (Grid[Index])
 		{
-			const float XOffset = (Index / Size) * BlockSpacing; // Divide by dimension
-			const float YOffset = (Index % Size) * BlockSpacing; // Modulo gives remainder
-
-			// Make position vector, offset from Grid location
-			const FVector UpdatedLocation = FVector(XOffset, YOffset, 0.f) + GetActorLocation();
-
+			const FVector UpdatedLocation = GetGridLocationAtIndex(Index);
 			Grid[Index]->SetActorLocation(UpdatedLocation);
 		}
 	}
+}
+
+FVector ABlockGrid::GetGridLocationAtIndex(int32 Index)
+{
+	const float XOffset = (Index / Size) * BlockSpacing; // Divide by dimension
+	const float YOffset = (Index % Size) * BlockSpacing; // Modulo gives remainder
+
+	return FVector(XOffset, YOffset, 0.f) + GetActorLocation();
 }
 
 bool ABlockGrid::bGridIsFull()
@@ -127,7 +120,6 @@ bool ABlockGrid::bGridIsFull()
 }
 
 // TODO: Implement actual grid movement
-// TODO: Remove UE_LOGs
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
 	// Return if no more moves can be made

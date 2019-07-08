@@ -86,11 +86,8 @@ private:
 	/** Updates the position of all Blocks to match the Grid TArray */
 	void UpdateAllBlockPositions();
 
-	/** 
-	Gets the world location of grid coordinate at specified index
-	i.e. an index of 5 would be coordinate (1, 1)
-	*/
-	//FVector GetGridLocationAtIndex(int32 Index);
+	/** Returns an FVector with the world location of grid coordinate at specified index */
+	FVector GetGridLocationAtIndex(int32 Index);
 
 	/** Returns true if Grid TArray is full */
 	bool bGridIsFull();
