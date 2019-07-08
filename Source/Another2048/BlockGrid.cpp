@@ -65,6 +65,9 @@ void ABlockGrid::SpawnAllGridSlots()
 
 void ABlockGrid::ShiftBlocksLeft()
 {
+	// Make sure we don't merge in the same spot twice
+	int32 LastMergedIndex = -1;
+
 	// Loop through the entire Grid
 	for (int32 Index = 0; Index < Grid.Num(); ++Index)
 	{
@@ -82,12 +85,14 @@ void ABlockGrid::ShiftBlocksLeft()
 					Grid[Index] = nullptr;
 					break;
 				}
-				// Else if blocks share the same value, double and delete one
-				else if (*Grid[LeftIndex] == *Grid[Index])
+				// Else if blocks share the same value and we haven't merged at that spot yet, double and delete one
+				else if (*Grid[LeftIndex] == *Grid[Index] &&
+						 LastMergedIndex != LeftIndex)
 				{
 					Grid[LeftIndex]->DoubleBlockValue();
 					Grid[Index]->Destroy();
 					Grid[Index] = nullptr;
+					LastMergedIndex = LeftIndex;
 					break;
 				}
 			}
@@ -97,6 +102,9 @@ void ABlockGrid::ShiftBlocksLeft()
 
 void ABlockGrid::ShiftBlocksRight()
 {
+	// Make sure we don't merge in the same spot twice
+	int32 LastMergedIndex = -1;
+
 	// Loop through the entire Grid
 	for (int32 Index = Grid.Num()-1; Index >= 0; --Index)
 	{
@@ -115,12 +123,14 @@ void ABlockGrid::ShiftBlocksRight()
 					Grid[Index] = nullptr;
 					break;
 				}
-				// Else if blocks share the same value, double and delete one
-				else if (*Grid[RightIndex] == *Grid[Index])
+				// Else if blocks share the same value and we haven't merged at that spot yet, double and delete one
+				else if (*Grid[RightIndex] == *Grid[Index] &&
+						 LastMergedIndex != RightIndex)
 				{
 					Grid[RightIndex]->DoubleBlockValue();
 					Grid[Index]->Destroy();
 					Grid[Index] = nullptr;
+					LastMergedIndex = RightIndex;
 					break;
 				}
 			}
