@@ -65,7 +65,6 @@ void ABlockGrid::SpawnAllGridSlots()
 
 void ABlockGrid::ShiftBlocksLeft()
 {
-	UE_LOG(LogTemp, Warning, TEXT("lefts"));
 	// Loop through the entire Grid
 	for (int32 Index = 0; Index < Grid.Num(); ++Index)
 	{
@@ -98,7 +97,35 @@ void ABlockGrid::ShiftBlocksLeft()
 
 void ABlockGrid::ShiftBlocksRight()
 {
-	UE_LOG(LogTemp, Warning, TEXT("rights"));
+	// Loop through the entire Grid
+	for (int32 Index = Grid.Num()-1; Index >= 0; --Index)
+	{
+		// If we encounter a block, shift it as far as it can go to the right
+		if (Grid[Index])
+		{
+			// Find right side index
+			// TODO: Can this be simplified?
+			int32 RightIndex = Index + Size - 1 - Index % Size;
+			for (; RightIndex > Index; --RightIndex)
+			{
+				// If empty, swap
+				if (!Grid[RightIndex])
+				{
+					Grid[RightIndex] = Grid[Index];
+					Grid[Index] = nullptr;
+					break;
+				}
+				// Else if blocks share the same value, double and delete one
+				else if (*Grid[RightIndex] == *Grid[Index])
+				{
+					Grid[RightIndex]->DoubleBlockValue();
+					Grid[Index]->Destroy();
+					Grid[Index] = nullptr;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void ABlockGrid::ShiftBlocksUp()
