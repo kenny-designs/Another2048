@@ -22,6 +22,7 @@ void ABlockGrid::BeginPlay()
 	Super::BeginPlay();
 
 	// Number of blocks
+	// TODO: Make this into a member variable?
 	const int32 NumBlocks = Size * Size;
 
 	// Create an empty grid of length NumBlocks
@@ -65,17 +66,6 @@ void ABlockGrid::SpawnAllGridSlots()
 void ABlockGrid::ShiftBlocksLeft()
 {
 	UE_LOG(LogTemp, Warning, TEXT("lefts"));
-	/*
-	for (int32 Index = 1; Index < Grid.Num(); ++Index)
-	{
-		if (Grid[Index] && !Grid[Index-1])
-		{
-			Grid[Index - 1] = Grid[Index];
-			Grid[Index] = nullptr;
-		}
-	}
-	*/
-
 	// Loop through the entire Grid
 	for (int32 Index = 0; Index < Grid.Num(); ++Index)
 	{
@@ -86,10 +76,18 @@ void ABlockGrid::ShiftBlocksLeft()
 			int32 LeftIndex = Index - (Index % Size);
 			for (; LeftIndex < Index; ++LeftIndex)
 			{
-				// Swap
+				// If empty, swap
 				if (!Grid[LeftIndex])
 				{
 					Grid[LeftIndex] = Grid[Index];
+					Grid[Index] = nullptr;
+					break;
+				}
+				// Else if blocks share the same value, double and delete one
+				else if (*Grid[LeftIndex] == *Grid[Index])
+				{
+					Grid[LeftIndex]->DoubleBlockValue();
+					Grid[Index]->Destroy();
 					Grid[Index] = nullptr;
 					break;
 				}
@@ -167,6 +165,7 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 		break;
 	}
 
+	// TODO: Only do the following if we shifted successfully
 	// Update all blocks world positions
 	UpdateAllBlockPositions();
 

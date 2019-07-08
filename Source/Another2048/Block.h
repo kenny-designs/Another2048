@@ -27,6 +27,16 @@ class ABlock : public AActor
 public:
 	ABlock();
 
+	int32 GetBlockValue() const;
+
+	void DoubleBlockValue();
+
+	/** Returns true if two ABlocks have the same BlockValue  */
+	FORCEINLINE bool operator==(const ABlock& OtherBlock) const
+	{
+		return BlockValue == OtherBlock.BlockValue;
+	}
+
 	/** Basic white material for the block **/
 	UPROPERTY()
 	class UMaterial* BaseMaterial;
@@ -40,6 +50,3 @@ private:
 	/** The block's current value. Defaults to 2 **/
 	int32 BlockValue = 2;
 };
-
-
-

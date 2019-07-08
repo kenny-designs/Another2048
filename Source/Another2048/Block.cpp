@@ -8,7 +8,6 @@
 #include "Components/TextRenderComponent.h"
 #include "Materials/MaterialInstance.h"
 
-
 #define LOCTEXT_NAMESPACE "PuzzleBlock"
 
 ABlock::ABlock()
@@ -52,6 +51,17 @@ ABlock::ABlock()
 
 	// Save a pointer to the orange material
 	BaseMaterial = ConstructorStatics.BaseMaterial.Get();
+}
+
+int32 ABlock::GetBlockValue() const
+{
+	return BlockValue;
+}
+
+void ABlock::DoubleBlockValue()
+{
+	BlockValue *= 2;
+	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
 }
 
 #undef LOCTEXT_NAMESPACE
