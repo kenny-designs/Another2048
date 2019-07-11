@@ -302,10 +302,29 @@ bool ABlockGrid::bGridIsFull()
 	return true;
 }
 
+void ABlockGrid::AttemptToSpawnBlock()
+{
+	// Spawn new block if able
+	if (!bGridIsFull())
+	{
+		SpawnBlockAtRandomLocation();
+	}
+	// Otherwise, game over
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("G A M E O V E R ! ! !"));
+		bIsGameOver = true;
+	}
+}
+
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
-	// Return if no more moves can be made
-	if (bIsGameOver) { return; }
+	// Return if no more moves can be made or if BlockMovementTimerHandle is active
+	if (bIsGameOver ||
+		GetWorld()->GetTimerManager().IsTimerActive(BlockMovementTimerHandle)) 
+	{
+		return;
+	}
 
 	// Log the current state of the Grid before moving anything
 	SetPreviousGridEqualToGrid();
@@ -333,15 +352,7 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 	// Otherwise, update all blocks world positions
 	UpdateAllBlockPositions();
 
-	// Spawn new block if able
-	if (!bGridIsFull())
-	{
-		SpawnBlockAtRandomLocation();
-	}
-	// Otherwise, game over
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("G A M E O V E R ! ! !"));
-		bIsGameOver = true;
-	}
+	// Wait for Blocks to finish moving then attempt to spawn a new block
+	// TODO: remove hardcoded 1.0f value
+	GetWorld()->GetTimerManager().SetTimer(BlockMovementTimerHandle, this, &ABlockGrid::AttemptToSpawnBlock, 0.5f, false);
 }

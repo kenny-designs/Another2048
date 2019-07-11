@@ -102,11 +102,17 @@ private:
 	/** Returns true if Grid TArray is full */
 	bool bGridIsFull();
 
+	/** Attempts to spawn a new Block. If it can't, gameover. */
+	void AttemptToSpawnBlock();
+
 	/** The grid we are playing on */
 	TArray<class ABlock*> Grid;
 
 	/** Used for checking if the Grid has changed */
 	TArray<class ABlock*> PreviousGrid;
+
+	/** FTimerHandle used to wait for Blocks to stop moving */
+	FTimerHandle BlockMovementTimerHandle;
 
 	/** If no more moves can be made, game over! */
 	bool bIsGameOver;
