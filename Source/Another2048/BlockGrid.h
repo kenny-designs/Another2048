@@ -78,8 +78,8 @@ private:
 	void SpawnAllGridSlots();
 
 	/** Shift all blocks to one side of the playfield */
-	void ShiftBlocksLeft();
-	void ShiftBlocksRight();
+	void ShiftBlocksLeft();		// TODO: Currently runs on O(n^2) time. Change to O(n)
+	void ShiftBlocksRight();	// TODO: Currently runs on O(n^2) time. Change to O(n)
 	void ShiftBlocksUp();
 	void ShiftBlocksDown();
 

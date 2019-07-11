@@ -140,7 +140,56 @@ void ABlockGrid::ShiftBlocksRight()
 
 void ABlockGrid::ShiftBlocksUp()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ups"));
+	// Create a TArray tracking the TopIndex for each column
+	TArray<int32> TopColumnIndex;
+
+	// Populate TopColumnIndex with the index for the top of each column in the Grid
+	TopColumnIndex.Init(-1, Size);
+	for (int32 Column = 0; Column < TopColumnIndex.Num(); ++Column)
+	{
+		TopColumnIndex[Column] = Grid.Num() - Size + Column;
+	}
+
+	// Iterate over Grid TArray from the last element of the second row to the first element in the array
+	for (int32 Index = Grid.Num() - Size - 1; Index >= 0; --Index)
+	{
+		// Find the TopIndex of the Grid
+		int32 Column = Index % Size;
+		int32 TopIndex = TopColumnIndex[Column];
+
+		// If we have no current block or if the TopIndex is less than 0, continue
+		if (!Grid[Index] || TopIndex < 0) { continue; }
+
+		// If there is no block at the TopIndex, swap
+		if (!Grid[TopIndex])
+		{
+			Grid[TopIndex] = Grid[Index];
+			Grid[Index] = nullptr;
+		}
+		// If both blocks are equal, double the top one, delete the other, and set a new TopColumnIndex for the column
+		else if (*Grid[TopIndex] == *Grid[Index])
+		{
+			Grid[TopIndex]->DoubleBlockValue();
+			Grid[Index]->Destroy();
+			Grid[Index] = nullptr;
+			TopColumnIndex[Column] = TopIndex - Size;
+		}
+		// If they are not equal, shift the current block up and set the new TopColumnIndex
+		else
+		{
+			// Lower the TopIndex by a row
+			TopIndex -= Size;
+			TopColumnIndex[Column] = TopIndex;
+
+			// Can't go any lower, break
+			if (TopIndex < 0) { break; }
+
+			// Swap the CurrentBlock with the new TopIndex
+			ABlock* CurrentBlock = Grid[Index];
+			Grid[Index] = nullptr;
+			Grid[TopIndex] = CurrentBlock;
+		}
+	}
 }
 
 void ABlockGrid::ShiftBlocksDown()
