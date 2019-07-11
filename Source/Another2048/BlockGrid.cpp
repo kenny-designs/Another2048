@@ -47,7 +47,7 @@ void ABlockGrid::SpawnBlockAtRandomLocation()
 
 	// Spawn a block
 	const FVector SpawnLocation = GetGridLocationAtIndex(BlockIndex);
-	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(SpawnLocation, FRotator(0, 0, 0));
+	ABlock* NewBlock = GetWorld()->SpawnActor<ABlock>(Block, SpawnLocation, FRotator(0, 0, 0));
 
 	// Add block to Grid TArray
 	Grid[BlockIndex] = NewBlock;
@@ -258,7 +258,7 @@ void ABlockGrid::UpdateAllBlockPositions()
 		{
 			// Move the block
 			const FVector UpdatedLocation = GetGridLocationAtIndex(Index);
-			Grid[Index]->SetActorLocation(UpdatedLocation);
+			Grid[Index]->MoveBlockToPosition(UpdatedLocation);
 		}
 	}
 }

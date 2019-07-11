@@ -58,9 +58,13 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
-	/** Slots used to represent playfield */
+	/** Slots used to represent the playfield grid */
 	UPROPERTY(Category=Grid, EditAnywhere)
 	TSubclassOf<class ASlot> Slot;
+
+	/** Blocks used to populate the playfield */
+	UPROPERTY(Category=Grid, EditAnywhere)
+	TSubclassOf<class ABlock> Block;
 
 	/** Returns DummyRoot subobject */
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }

@@ -31,6 +31,10 @@ public:
 
 	void DoubleBlockValue();
 
+	/** Smoothly translates the Block to the given EndPosition */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Movement")
+	void MoveBlockToPosition(FVector EndPosition);
+
 	/** Returns true if two ABlocks have the same BlockValue  */
 	FORCEINLINE bool operator==(const ABlock& OtherBlock) const
 	{
