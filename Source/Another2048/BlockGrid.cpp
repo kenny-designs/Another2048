@@ -92,8 +92,9 @@ void ABlockGrid::ShiftBlocksLeft()
 				else if (*Grid[LeftIndex] == *Grid[Index] &&
 						 LastMergedIndex != LeftIndex)
 				{
-					Grid[LeftIndex]->DoubleBlockValue();
-					Grid[Index]->Destroy();
+					BlocksMarkedForDeletion.Emplace(Grid[LeftIndex]);
+					Grid[Index]->DoubleBlockValue();
+					Grid[LeftIndex] = Grid[Index];
 					Grid[Index] = nullptr;
 					LastMergedIndex = LeftIndex;
 					break;
@@ -130,8 +131,9 @@ void ABlockGrid::ShiftBlocksRight()
 				else if (*Grid[RightIndex] == *Grid[Index] &&
 						 LastMergedIndex != RightIndex)
 				{
-					Grid[RightIndex]->DoubleBlockValue();
-					Grid[Index]->Destroy();
+					BlocksMarkedForDeletion.Emplace(Grid[RightIndex]);
+					Grid[Index]->DoubleBlockValue();
+					Grid[RightIndex] = Grid[Index];
 					Grid[Index] = nullptr;
 					LastMergedIndex = RightIndex;
 					break;
@@ -169,11 +171,12 @@ void ABlockGrid::ShiftBlocksUp()
 			Grid[TopIndex] = Grid[Index];
 			Grid[Index] = nullptr;
 		}
-		// If both blocks are equal, double the top one, delete the other, and set a new TopColumnIndex for the column
+		// If both blocks are equal, double one, delete the other, and set a new TopColumnIndex for the column
 		else if (*Grid[TopIndex] == *Grid[Index])
 		{
-			Grid[TopIndex]->DoubleBlockValue();
-			Grid[Index]->Destroy();
+			BlocksMarkedForDeletion.Emplace(Grid[TopIndex]);
+			Grid[Index]->DoubleBlockValue();
+			Grid[TopIndex] = Grid[Index];
 			Grid[Index] = nullptr;
 			TopColumnIndex[Column] = TopIndex - Size;
 		}
@@ -223,11 +226,12 @@ void ABlockGrid::ShiftBlocksDown()
 			Grid[BottomIndex] = Grid[Index];
 			Grid[Index] = nullptr;
 		}
-		// If both blocks are equal, double the top one, delete the other, and set a new BottomColumnIndex for the column
+		// If both blocks are equal, double one, delete the other, and set a new BottomColumnIndex for the column
 		else if (*Grid[BottomIndex] == *Grid[Index])
 		{
-			Grid[BottomIndex]->DoubleBlockValue();
-			Grid[Index]->Destroy();
+			BlocksMarkedForDeletion.Emplace(Grid[BottomIndex]);
+			Grid[Index]->DoubleBlockValue();
+			Grid[BottomIndex] = Grid[Index];
 			Grid[Index] = nullptr;
 			BottomColumnIndex[Column] = BottomIndex + Size;
 		}
@@ -317,6 +321,14 @@ void ABlockGrid::AttemptToSpawnBlock()
 	}
 }
 
+void ABlockGrid::DestroyBlocksMarkedForDeletion()
+{
+	while (BlocksMarkedForDeletion.Num() > 0)
+	{
+		BlocksMarkedForDeletion.Pop()->Destroy();
+	}
+}
+
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
 	// Return if no more moves can be made or if BlockMovementTimerHandle is active
@@ -354,5 +366,6 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 
 	// Wait for Blocks to finish moving then attempt to spawn a new block
 	// TODO: remove hardcoded 1.0f value
-	GetWorld()->GetTimerManager().SetTimer(BlockMovementTimerHandle, this, &ABlockGrid::AttemptToSpawnBlock, 0.5f, false);
+	GetWorld()->GetTimerManager().SetTimer(BlockDeletionTimerHandle, this, &ABlockGrid::DestroyBlocksMarkedForDeletion, 0.5f, false);
+	GetWorld()->GetTimerManager().SetTimer(BlockMovementTimerHandle, this, &ABlockGrid::AttemptToSpawnBlock, 0.75f, false);
 }

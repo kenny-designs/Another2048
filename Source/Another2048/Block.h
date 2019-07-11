@@ -29,7 +29,9 @@ public:
 
 	int32 GetBlockValue() const;
 
+	/** Doubles the value of the Block and updates its label */
 	void DoubleBlockValue();
+
 
 	/** Smoothly translates the Block to the given EndPosition */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Movement")

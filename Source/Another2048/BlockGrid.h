@@ -105,14 +105,23 @@ private:
 	/** Attempts to spawn a new Block. If it can't, gameover. */
 	void AttemptToSpawnBlock();
 
+	/** Destroy all Blocks marked for Deletion */
+	void DestroyBlocksMarkedForDeletion();
+
 	/** The grid we are playing on */
 	TArray<class ABlock*> Grid;
 
 	/** Used for checking if the Grid has changed */
 	TArray<class ABlock*> PreviousGrid;
 
+	/** Blocks marked for deletion */
+	TArray<class ABlock*> BlocksMarkedForDeletion;
+
 	/** FTimerHandle used to wait for Blocks to stop moving */
 	FTimerHandle BlockMovementTimerHandle;
+
+	/** FTimerHandle used to wait for Blocks to be deleted */
+	FTimerHandle BlockDeletionTimerHandle;
 
 	/** If no more moves can be made, game over! */
 	bool bIsGameOver;
