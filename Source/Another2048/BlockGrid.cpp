@@ -28,6 +28,9 @@ void ABlockGrid::BeginPlay()
 	// Create an empty grid of length NumBlocks
 	Grid.Init(nullptr, NumBlocks);
 
+	// Do the same for the PreviousGrid
+	PreviousGrid.Init(nullptr, NumBlocks);
+
 	// Setup playfield
 	SpawnBlockAtRandomLocation();
 	SpawnAllGridSlots();
@@ -260,6 +263,27 @@ void ABlockGrid::UpdateAllBlockPositions()
 	}
 }
 
+void ABlockGrid::SetPreviousGridEqualToGrid()
+{
+	for (int32 Index = 0; Index < Grid.Num(); ++Index)
+	{
+		PreviousGrid[Index] = Grid[Index];
+	}
+}
+
+bool ABlockGrid::bGridHasChanged()
+{
+	for (int32 Index = 0; Index < Grid.Num(); ++Index)
+	{
+		if (PreviousGrid[Index] != Grid[Index])
+		{ 
+			return true;
+		}
+	}
+
+	return false;
+}
+
 FVector ABlockGrid::GetGridLocationAtIndex(int32 Index)
 {
 	const float XOffset = (Index / Size) * BlockSpacing; // Divide by dimension
@@ -278,11 +302,13 @@ bool ABlockGrid::bGridIsFull()
 	return true;
 }
 
-// TODO: Implement actual grid movement
 void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
 	// Return if no more moves can be made
 	if (bIsGameOver) { return; }
+
+	// Log the current state of the Grid before moving anything
+	SetPreviousGridEqualToGrid();
 
 	// Move blocks
 	switch (EDirection)
@@ -301,8 +327,10 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 		break;
 	}
 
-	// TODO: Only do the following if we shifted successfully
-	// Update all blocks world positions
+	// If the Grid hasn't changed, return
+	if (!bGridHasChanged()) { return; }
+
+	// Otherwise, update all blocks world positions
 	UpdateAllBlockPositions();
 
 	// Spawn new block if able

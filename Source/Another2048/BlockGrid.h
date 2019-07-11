@@ -86,6 +86,12 @@ private:
 	/** Updates the position of all Blocks to match the Grid TArray */
 	void UpdateAllBlockPositions();
 
+	/** Sets the PreviousGrid to be equal to the current Grid */
+	void SetPreviousGridEqualToGrid();
+
+	/** Returns true if the Grid is not equal to the PreviousGrid */
+	bool bGridHasChanged();
+
 	/** Returns an FVector with the world location of grid coordinate at specified index */
 	FVector GetGridLocationAtIndex(int32 Index);
 
@@ -94,6 +100,9 @@ private:
 
 	/** The grid we are playing on */
 	TArray<class ABlock*> Grid;
+
+	/** Used for checking if the Grid has changed */
+	TArray<class ABlock*> PreviousGrid;
 
 	/** If no more moves can be made, game over! */
 	bool bIsGameOver;
