@@ -150,7 +150,7 @@ void ABlockGrid::ShiftBlocksUp()
 		TopColumnIndex[Column] = Grid.Num() - Size + Column;
 	}
 
-	// Iterate over Grid TArray from the last element of the second row to the first element in the array
+	// Iterate over Grid TArray from the last element of the second to top row to the first element in the array
 	for (int32 Index = Grid.Num() - Size - 1; Index >= 0; --Index)
 	{
 		// Find the TopIndex of the Grid
@@ -181,8 +181,8 @@ void ABlockGrid::ShiftBlocksUp()
 			TopIndex -= Size;
 			TopColumnIndex[Column] = TopIndex;
 
-			// Can't go any lower, break
-			if (TopIndex < 0) { break; }
+			// Can't go any lower, continue
+			if (TopIndex < 0) { continue; }	
 
 			// Swap the CurrentBlock with the new TopIndex
 			ABlock* CurrentBlock = Grid[Index];
@@ -194,7 +194,57 @@ void ABlockGrid::ShiftBlocksUp()
 
 void ABlockGrid::ShiftBlocksDown()
 {
-	UE_LOG(LogTemp, Warning, TEXT("downs"));
+	// Create a TArray tracking the BottomIndex for each column
+	TArray<int32> BottomColumnIndex;
+
+	// Populate BottomColumnIndex with the index for the bottom of each column in the Grid
+	BottomColumnIndex.Init(-1, Size);
+	for (int32 Column = 0; Column < BottomColumnIndex.Num(); ++Column)
+	{
+		BottomColumnIndex[Column] = Column;
+	}
+
+	// Iterate over Grid TArray from the first element of the second row to the last element in the array
+	for (int32 Index = Size; Index < Grid.Num(); ++Index)
+	{
+		// Find the BottomIndex of the Grid
+		int32 Column = Index % Size;
+		int32 BottomIndex = BottomColumnIndex[Column];
+
+		// If we have no current block or if the BottomIndex is greater than or equal to Grid length, continue
+		if (!Grid[Index] || BottomIndex >= Grid.Num()) { continue; }
+
+		// If there is no block at the BottomIndex, swap
+		if (!Grid[BottomIndex])
+		{
+			Grid[BottomIndex] = Grid[Index];
+			Grid[Index] = nullptr;
+		}
+		// If both blocks are equal, double the top one, delete the other, and set a new BottomColumnIndex for the column
+		else if (*Grid[BottomIndex] == *Grid[Index])
+		{
+			Grid[BottomIndex]->DoubleBlockValue();
+			Grid[Index]->Destroy();
+			Grid[Index] = nullptr;
+			BottomColumnIndex[Column] = BottomIndex + Size;
+		}
+		// If they are not equal, shift the current block down and set the new BottomColumnIndex
+		else
+		{
+			// Raise the BottomIndex by a row
+			BottomIndex += Size;
+			BottomColumnIndex[Column] = BottomIndex;
+
+			// Can't go any higher, continue
+			if (BottomIndex >= Grid.Num()) { continue; }	
+
+			// Swap the CurrentBlock with the new BottomIndex
+			ABlock* CurrentBlock = Grid[Index];
+			Grid[Index] = nullptr;
+			Grid[BottomIndex] = CurrentBlock;
+		}
+	}
+
 }
 
 void ABlockGrid::UpdateAllBlockPositions()
