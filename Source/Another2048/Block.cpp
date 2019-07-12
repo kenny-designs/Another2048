@@ -49,7 +49,7 @@ ABlock::ABlock()
 	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
 	BlockValueLabel->SetupAttachment(DummyRoot);
 
-	// Save a pointer to the orange material
+	// Save a pointer to the BaseMaterial
 	BaseMaterial = ConstructorStatics.BaseMaterial.Get();
 }
 

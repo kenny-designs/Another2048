@@ -7,5 +7,5 @@ AAnother2048PlayerController::AAnother2048PlayerController()
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableTouchEvents = true;
-	DefaultMouseCursor = EMouseCursor::Crosshairs;
+	//DefaultMouseCursor = EMouseCursor::Crosshairs;
 }

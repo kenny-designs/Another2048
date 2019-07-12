@@ -37,6 +37,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Movement")
 	void MoveBlockToPosition(FVector EndPosition);
 
+	/** Plays animation before destroying the Block */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Destruction")
+	void DestroyBlock();
+
 	/** Returns true if two ABlocks have the same BlockValue  */
 	FORCEINLINE bool operator==(const ABlock& OtherBlock) const
 	{
@@ -44,7 +48,7 @@ public:
 	}
 
 	/** Basic white material for the block **/
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, Category = "Material")
 	class UMaterial* BaseMaterial;
 
 	/** Returns DummyRoot subobject **/
