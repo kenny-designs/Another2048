@@ -76,5 +76,6 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-# The FantasyVillage content pack is quite huge, ignoring for now
+# Ignoring content packs
 Content/FantasyVillage
+Content/Brushify
