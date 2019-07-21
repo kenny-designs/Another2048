@@ -131,9 +131,6 @@ private:
 	/** FTimerHandle used to wait for Blocks to stop moving */
 	FTimerHandle BlockMovementTimerHandle;
 
-	/** FTimerHandle used to wait for Blocks to be deleted */
-	FTimerHandle BlockDeletionTimerHandle;
-
 	/** If no more moves can be made, game over! */
 	bool bIsGameOver;
 };

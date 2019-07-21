@@ -334,6 +334,5 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 
 	// Wait for Blocks to finish moving then attempt to spawn a new block
 	// TODO: remove hardcoded 1.0f value
-	//GetWorld()->GetTimerManager().SetTimer(BlockDeletionTimerHandle, this, &ABlockGrid::DestroyBlocksMarkedForDeletion, 0.5f, false);
 	GetWorld()->GetTimerManager().SetTimer(BlockMovementTimerHandle, this, &ABlockGrid::AttemptToSpawnBlock, 0.75f, false);
 }
