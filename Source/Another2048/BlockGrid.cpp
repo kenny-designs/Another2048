@@ -28,12 +28,12 @@ void ABlockGrid::BeginPlay()
 	// Create an empty grid of length NumBlocks
 	Grid.Init(nullptr, NumBlocks);
 
-	// Do the same for the PreviousGrid
+	// Do the same for the PreviousGrid so that it can be compared to Grid
 	PreviousGrid.Init(nullptr, NumBlocks);
 
 	// Setup playfield
-	SpawnBlockAtRandomLocation();
 	SpawnAllGridSlots();
+	SpawnBlockAtRandomLocation();
 }
 
 void ABlockGrid::SpawnBlockAtRandomLocation()
@@ -68,79 +68,16 @@ void ABlockGrid::SpawnAllGridSlots()
 
 void ABlockGrid::ShiftBlocksLeft()
 {
-	// Make sure we don't merge in the same spot twice
-	int32 LastMergedIndex = -1;
-
-	// Loop through the entire Grid
-	for (int32 Index = 0; Index < Grid.Num(); ++Index)
-	{
-		// If we encounter a block, shift it as far as it can go to the left
-		if (Grid[Index])
-		{
-			// Find left side index
-			int32 LeftIndex = Index - (Index % Size);
-			for (; LeftIndex < Index; ++LeftIndex)
-			{
-				// If empty, swap
-				if (!Grid[LeftIndex])
-				{
-					Grid[LeftIndex] = Grid[Index];
-					Grid[Index] = nullptr;
-					break;
-				}
-				// Else if blocks share the same value and we haven't merged at that spot yet, double and delete one
-				else if (*Grid[LeftIndex] == *Grid[Index] &&
-						 LastMergedIndex != LeftIndex)
-				{
-					BlocksMarkedForDeletion.Emplace(Grid[LeftIndex]);
-					Grid[Index]->DoubleBlockValue();
-					Grid[LeftIndex] = Grid[Index];
-					Grid[Index] = nullptr;
-					LastMergedIndex = LeftIndex;
-					break;
-				}
-			}
-		}
-	}
+	TransposeGrid();
+	ShiftBlocksUp();
+	TransposeGrid();
 }
 
 void ABlockGrid::ShiftBlocksRight()
 {
-	// Make sure we don't merge in the same spot twice
-	int32 LastMergedIndex = -1;
-
-	// Loop through the entire Grid
-	for (int32 Index = Grid.Num()-1; Index >= 0; --Index)
-	{
-		// If we encounter a block, shift it as far as it can go to the right
-		if (Grid[Index])
-		{
-			// Find right side index
-			// TODO: Can this be simplified?
-			int32 RightIndex = Index + Size - 1 - Index % Size;
-			for (; RightIndex > Index; --RightIndex)
-			{
-				// If empty, swap
-				if (!Grid[RightIndex])
-				{
-					Grid[RightIndex] = Grid[Index];
-					Grid[Index] = nullptr;
-					break;
-				}
-				// Else if blocks share the same value and we haven't merged at that spot yet, double and delete one
-				else if (*Grid[RightIndex] == *Grid[Index] &&
-						 LastMergedIndex != RightIndex)
-				{
-					BlocksMarkedForDeletion.Emplace(Grid[RightIndex]);
-					Grid[Index]->DoubleBlockValue();
-					Grid[RightIndex] = Grid[Index];
-					Grid[Index] = nullptr;
-					LastMergedIndex = RightIndex;
-					break;
-				}
-			}
-		}
-	}
+	TransposeGrid();
+	ShiftBlocksDown();
+	TransposeGrid();
 }
 
 void ABlockGrid::ShiftBlocksUp()
@@ -326,6 +263,34 @@ void ABlockGrid::DestroyBlocksMarkedForDeletion()
 	while (BlocksMarkedForDeletion.Num() > 0)
 	{
 		BlocksMarkedForDeletion.Pop()->DestroyBlock();
+	}
+}
+
+void ABlockGrid::TransposeGrid()
+{
+	int32 PosX = 1, PosY = 2;
+
+	while (PosY <= Size)
+	{
+		if (PosX < PosY)
+		{
+			// Find indices we are swapping
+			int32 IndexA = (Size - PosY) * Size + PosX - 1;
+			int32 IndexB = (Size - PosX) * Size + PosY - 1;
+
+			// Perform the swap
+			ABlock* TempBlock = Grid[IndexA];
+			Grid[IndexA] = Grid[IndexB];
+			Grid[IndexB] = TempBlock;
+
+			++PosX;
+		}
+		// Row complete. Go on to next one
+		else
+		{
+			PosX = 1;
+			++PosY;
+		}
 	}
 }
 

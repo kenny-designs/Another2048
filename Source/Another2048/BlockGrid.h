@@ -48,6 +48,7 @@ class ABlockGrid : public AActor
 public:
 	ABlockGrid();
 
+	/** Attempts to move all blocks in given direction. Meant to be used by PlayerController */
 	void MoveGridBlocks(EBlockGridMoveDirection EDirection);
 
 	/** Number of blocks along each side of grid */
@@ -82,8 +83,8 @@ private:
 	void SpawnAllGridSlots();
 
 	/** Shift all blocks to one side of the playfield */
-	void ShiftBlocksLeft();		// TODO: Currently runs on O(n^2) time. Change to O(n)
-	void ShiftBlocksRight();	// TODO: Currently runs on O(n^2) time. Change to O(n)
+	void ShiftBlocksLeft();
+	void ShiftBlocksRight();
 	void ShiftBlocksUp();
 	void ShiftBlocksDown();
 
@@ -93,7 +94,10 @@ private:
 	/** Sets the PreviousGrid to be equal to the current Grid */
 	void SetPreviousGridEqualToGrid();
 
-	/** Returns true if the Grid is not equal to the PreviousGrid */
+	/**
+	 * Returns true if the Grid is not equal to the PreviousGrid. Used for determining if
+	 * a valid move was made.
+	 */
 	bool bGridHasChanged();
 
 	/** Returns an FVector with the world location of grid coordinate at specified index */
@@ -107,6 +111,13 @@ private:
 
 	/** Destroy all Blocks marked for Deletion */
 	void DestroyBlocksMarkedForDeletion();
+
+	/**
+	 * Transposes the Grid as you would a matrix. Used in conjunction with the ShiftBlocksUp() and
+	 * ShiftBlocksDown() methods for shifting the Blocks left and right. See ShiftBlocksLeft() and
+	 * ShiftBlocksRight() for how this is implmented.
+	 */
+	void TransposeGrid();
 
 	/** The grid we are playing on */
 	TArray<class ABlock*> Grid;

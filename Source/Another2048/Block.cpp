@@ -30,6 +30,7 @@ ABlock::ABlock()
 	RootComponent = DummyRoot;
 
 	// Create static mesh component
+	// TODO: remove. Now using static mesh in blueprint
 	BlockMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BlockMesh0"));
 	BlockMesh->SetStaticMesh(ConstructorStatics.PlaneMesh.Get());
 	BlockMesh->SetRelativeScale3D(FVector(1.f,1.f,0.25f));
