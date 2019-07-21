@@ -268,6 +268,7 @@ void ABlockGrid::DestroyBlocksMarkedForDeletion()
 
 void ABlockGrid::TransposeGrid()
 {
+	// Begin on second row from the top of the Grid
 	int32 PosX = 1, PosY = 2;
 
 	while (PosY <= Size)
