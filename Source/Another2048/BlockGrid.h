@@ -59,6 +59,10 @@ public:
 	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
 	float BlockSpacing;
 
+	/** Time to wait in seconds for next Block spawn */
+	UPROPERTY(Category=Grid, EditAnywhere, BlueprintReadOnly)
+	float BlockSpawnDelay;
+
 	/** Slots used to represent the playfield grid */
 	UPROPERTY(Category=Grid, EditAnywhere)
 	TSubclassOf<class ASlot> Slot;
@@ -128,8 +132,8 @@ private:
 	/** Blocks marked for deletion */
 	TArray<class ABlock*> BlocksMarkedForDeletion;
 
-	/** FTimerHandle used to wait for Blocks to stop moving */
-	FTimerHandle BlockMovementTimerHandle;
+	/** FTimerHandle used to delay the next Block spawn */
+	FTimerHandle BlockSpawnDelayTimerHandle;
 
 	/** If no more moves can be made, game over! */
 	bool bIsGameOver;

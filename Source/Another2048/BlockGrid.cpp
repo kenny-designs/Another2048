@@ -14,6 +14,7 @@ ABlockGrid::ABlockGrid()
 	// Set defaults
 	Size = 4;
 	BlockSpacing = 300.f;
+	BlockSpawnDelay = 0.75f;
 	bIsGameOver = false;
 }
 
@@ -22,7 +23,6 @@ void ABlockGrid::BeginPlay()
 	Super::BeginPlay();
 
 	// Number of blocks
-	// TODO: Make this into a member variable?
 	const int32 NumBlocks = Size * Size;
 
 	// Create an empty grid of length NumBlocks
@@ -299,7 +299,7 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 {
 	// Return if no more moves can be made or if BlockMovementTimerHandle is active
 	if (bIsGameOver ||
-		GetWorld()->GetTimerManager().IsTimerActive(BlockMovementTimerHandle)) 
+		GetWorld()->GetTimerManager().IsTimerActive(BlockSpawnDelayTimerHandle)) 
 	{
 		return;
 	}
@@ -333,6 +333,6 @@ void ABlockGrid::MoveGridBlocks(EBlockGridMoveDirection EDirection)
 	DestroyBlocksMarkedForDeletion();
 
 	// Wait for Blocks to finish moving then attempt to spawn a new block
-	// TODO: remove hardcoded 1.0f value
-	GetWorld()->GetTimerManager().SetTimer(BlockMovementTimerHandle, this, &ABlockGrid::AttemptToSpawnBlock, 0.75f, false);
+	GetWorld()->GetTimerManager().SetTimer(BlockSpawnDelayTimerHandle, this,
+										   &ABlockGrid::AttemptToSpawnBlock, BlockSpawnDelay, false);
 }
