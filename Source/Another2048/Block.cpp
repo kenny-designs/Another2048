@@ -29,15 +29,6 @@ ABlock::ABlock()
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
 
-	// Create static mesh component
-	// TODO: remove. Now using static mesh in blueprint
-	BlockMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BlockMesh0"));
-	BlockMesh->SetStaticMesh(ConstructorStatics.PlaneMesh.Get());
-	BlockMesh->SetRelativeScale3D(FVector(1.f,1.f,0.25f));
-	BlockMesh->SetRelativeLocation(FVector(0.f,0.f,25.f));
-	BlockMesh->SetMaterial(0, ConstructorStatics.BaseMaterial.Get());
-	BlockMesh->SetupAttachment(DummyRoot);
-
 	// Create text render component
 	BlockValueLabel = CreateDefaultSubobject<UTextRenderComponent>(TEXT("BlockValue0"));
 	BlockValueLabel->SetRelativeRotation(FRotator(90.f, 180.f, 0.f));
