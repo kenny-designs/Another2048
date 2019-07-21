@@ -77,6 +77,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Ignoring content packs
-Content/FantasyVillage
-Content/Brushify
-Content/FantasyOrchestral
+Content/Marketplace
