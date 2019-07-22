@@ -16,10 +16,6 @@ class ABlock : public AActor
 	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USceneComponent* DummyRoot;
 
-	/** StaticMesh component */
-	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* BlockMesh;
-
 	/** Text component for the score */
 	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UTextRenderComponent* BlockValueLabel;
