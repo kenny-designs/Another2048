@@ -32,7 +32,6 @@ public:
 	/** Doubles the value of the Block and updates its label */
 	void DoubleBlockValue();
 
-
 	/** Smoothly translates the Block to the given EndPosition */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Movement")
 	void MoveBlockToPosition(FVector EndPosition);
@@ -47,14 +46,8 @@ public:
 		return BlockValue == OtherBlock.BlockValue;
 	}
 
-	/** Basic white material for the block **/
-	UPROPERTY(BlueprintReadWrite, Category = "Material")
-	class UMaterial* BaseMaterial;
-
 	/** Returns DummyRoot subobject **/
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
-	/** Returns BlockMesh subobject **/
-	FORCEINLINE class UStaticMeshComponent* GetBlockMesh() const { return BlockMesh; }
 
 private:
 	/** The block's current value. Defaults to 2 **/

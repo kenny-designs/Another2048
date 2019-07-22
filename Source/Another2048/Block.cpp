@@ -12,19 +12,6 @@
 
 ABlock::ABlock()
 {
-	// Structure to hold one-time initialization
-	struct FConstructorStatics
-	{
-		ConstructorHelpers::FObjectFinderOptional<UStaticMesh> PlaneMesh;
-		ConstructorHelpers::FObjectFinderOptional<UMaterial> BaseMaterial;
-		FConstructorStatics()
-			: PlaneMesh(TEXT("/Game/Puzzle/Meshes/PuzzleCube.PuzzleCube"))
-			, BaseMaterial(TEXT("/Game/Puzzle/Meshes/BaseMaterial.BaseMaterial"))
-		{
-		}
-	};
-	static FConstructorStatics ConstructorStatics;
-
 	// Create dummy root scene component
 	DummyRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Dummy0"));
 	RootComponent = DummyRoot;
@@ -40,9 +27,6 @@ ABlock::ABlock()
 	BlockValueLabel->SetYScale(4.f);
 	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
 	BlockValueLabel->SetupAttachment(DummyRoot);
-
-	// Save a pointer to the BaseMaterial
-	BaseMaterial = ConstructorStatics.BaseMaterial.Get();
 }
 
 int32 ABlock::GetBlockValue() const
