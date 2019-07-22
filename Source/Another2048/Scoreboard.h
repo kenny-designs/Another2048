@@ -10,17 +10,27 @@ UCLASS()
 class ANOTHER2048_API AScoreboard : public AActor
 {
 	GENERATED_BODY()
+
+	/** Dummy root component */
+	UPROPERTY(Category = Block, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* DummyRoot;
+
+	/** Text component for the score */
+	UPROPERTY(Category = "Score", VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UTextRenderComponent* ScoreboardLabel;
 	
 public:	
 	// Sets default values for this actor's properties
 	AScoreboard();
 
+	// TODO: May beed to remove/change
+	void AddToScore(int32 ValueToAdd);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+private:
+	/** The player's current score. Defaults to 0 **/
+	int32 Score = 0;
 };
