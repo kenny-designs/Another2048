@@ -2,11 +2,8 @@
 
 
 #include "Block.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Components/StaticMeshComponent.h"
-#include "Engine/StaticMesh.h"
 #include "Components/TextRenderComponent.h"
-#include "Materials/MaterialInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 #define LOCTEXT_NAMESPACE "PuzzleBlock"
 
@@ -38,6 +35,12 @@ void ABlock::DoubleBlockValue()
 {
 	BlockValue *= 2;
 	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
+}
+
+void ABlock::PlayRandomDeathSound() const
+{
+	int32 Index = FMath::RandHelper(DestructionSoundWaves.Num());
+	UGameplayStatics::PlaySound2D(GetWorld(), DestructionSoundWaves[Index]);
 }
 
 #undef LOCTEXT_NAMESPACE

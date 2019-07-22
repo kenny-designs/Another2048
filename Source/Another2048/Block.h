@@ -23,6 +23,11 @@ class ABlock : public AActor
 public:
 	ABlock();
 
+	// TODO: See if you can make static
+	/** TArray of sounds to randomly play among Block destruction */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Destruction")
+	TArray<class USoundWave*> DestructionSoundWaves;
+
 	int32 GetBlockValue() const;
 
 	/** Doubles the value of the Block and updates its label */
@@ -35,6 +40,10 @@ public:
 	/** Plays animation before destroying the Block */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Destruction")
 	void DestroyBlock();
+
+	/** Play a random death sound */
+	UFUNCTION(BlueprintCallable, Category = "Destruction")
+	void PlayRandomDeathSound() const;
 
 	/** Returns true if two ABlocks have the same BlockValue  */
 	FORCEINLINE bool operator==(const ABlock& OtherBlock) const
