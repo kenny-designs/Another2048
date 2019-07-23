@@ -1,0 +1,8 @@
+digraph G {
+	/* Another2048Pawn Class */
+	Another2048Pawn -> BlockGrid;
+	
+	/* BlockGrid Class */
+	BlockGrid -> Block;
+	BlockGrid -> Slot;
+}
