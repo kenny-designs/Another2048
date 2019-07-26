@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Scoreboard.h"
 #include "Block.generated.h"
 
 /** Block that the player moves around the playfield */
@@ -54,7 +55,14 @@ public:
 	/** Returns DummyRoot subobject **/
 	FORCEINLINE class USceneComponent* GetDummyRoot() const { return DummyRoot; }
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	/** The block's current value. Defaults to 2 **/
 	int32 BlockValue = 2;
+
+	/** Static reference to the scoreboard */
+	AScoreboard* Scoreboard;
 };

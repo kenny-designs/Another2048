@@ -34,9 +34,6 @@ void AScoreboard::AddToScore(int32 ValueToAdd)
 void AScoreboard::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// TODO: testing method, remove later
-	AddToScore(1000);
 }
 
 #undef LOCTEXT_NAMESPACE

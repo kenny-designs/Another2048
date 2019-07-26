@@ -26,6 +26,27 @@ ABlock::ABlock()
 	BlockValueLabel->SetupAttachment(DummyRoot);
 }
 
+// Called when the game starts or when spawned
+void ABlock::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Find the scoreboard within the scene
+	if (!Scoreboard)
+	{
+		TArray<AActor*> ScoreboardFound;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AScoreboard::StaticClass(), ScoreboardFound);
+
+		// If we didn't find anything, return
+		// TODO: Add warning if nothing was found
+		// TODO: Also, make it so we aren't constantly looking for the Scoreboard
+		if (ScoreboardFound.Num() < 1) { return; }
+
+		// Otherwise, get pointer to first Scoreboard found
+		Scoreboard = Cast<AScoreboard>(ScoreboardFound[0]);
+	}
+}
+
 int32 ABlock::GetBlockValue() const
 {
 	return BlockValue;
@@ -35,6 +56,9 @@ void ABlock::DoubleBlockValue()
 {
 	BlockValue *= 2;
 	BlockValueLabel->SetText(FText::Format(LOCTEXT("BlockValueFmt", "{0}"), FText::AsNumber(BlockValue)));
+
+	// Add new BlockValue to the Scoreboard
+	Scoreboard->AddToScore(BlockValue);
 }
 
 void ABlock::PlayRandomDeathSound() const
