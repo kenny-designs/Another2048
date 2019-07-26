@@ -50,6 +50,15 @@ void ABlock::BeginPlay()
 	}
 }
 
+void ABlock::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (EndPlayReason == EEndPlayReason::EndPlayInEditor &&
+		ABlock::Scoreboard)
+	{
+		ABlock::Scoreboard = nullptr;
+	}
+}
+
 int32 ABlock::GetBlockValue() const
 {
 	return BlockValue;

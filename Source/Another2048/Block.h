@@ -61,6 +61,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/** Used to clean up static variables in the editor upon exiting the game */
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 private:
 	/** The block's current value. Defaults to 2 **/
 	int32 BlockValue = 2;
