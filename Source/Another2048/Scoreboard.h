@@ -26,10 +26,6 @@ public:
 	// TODO: May need to remove/change
 	void AddToScore(int32 ValueToAdd);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 private:
 	/** The player's current score. Defaults to 0 **/
 	int32 Score = 0;

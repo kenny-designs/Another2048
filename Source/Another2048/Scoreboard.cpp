@@ -30,10 +30,4 @@ void AScoreboard::AddToScore(int32 ValueToAdd)
 	ScoreboardLabel->SetText(FText::Format(LOCTEXT("ScoreboardFmt", "{0}"), FText::AsNumber(Score)));
 }
 
-// Called when the game starts or when spawned
-void AScoreboard::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 #undef LOCTEXT_NAMESPACE

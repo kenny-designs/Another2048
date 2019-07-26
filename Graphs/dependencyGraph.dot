@@ -5,4 +5,7 @@ digraph G {
 	/* BlockGrid Class */
 	BlockGrid -> Block;
 	BlockGrid -> Slot;
+	
+	/* Block Class */
+	Block -> Scoreboard;
 }
