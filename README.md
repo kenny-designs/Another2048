@@ -6,7 +6,7 @@ Another2048 is my own implementation of the [original 2048 game](http://2048game
 Currently, Another2048 is a work in progress. In it's current state, the game works as it should and it looks pretty decent to boot. It still needs some polish but it's coming along well. A playable version will be up soon for download along with a web version if possible.
 
 ### WIP Screenshot
-![alt text](./screenshot.png "Screenshot")
+![alt text](./screenshot2.png "Screenshot")
 
 ### Notes about cloning/forking
 Many of the assets I am using I haven't added to the repo. As such, you won't be able to compile and get the game up and running on your own (although I would like to change that soon). I don't want to upload several gigs worth of Unreal Marketplace stuff but I will list what I'm using below:
