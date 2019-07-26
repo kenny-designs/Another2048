@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Block.generated.h"
 
-/** A block that can be clicked */
+/** Block that the player moves around the playfield */
 UCLASS(minimalapi)
 class ABlock : public AActor
 {

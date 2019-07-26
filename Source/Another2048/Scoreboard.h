@@ -23,7 +23,7 @@ public:
 	// Sets default values for this actor's properties
 	AScoreboard();
 
-	// TODO: May beed to remove/change
+	// TODO: May need to remove/change
 	void AddToScore(int32 ValueToAdd);
 
 protected:
