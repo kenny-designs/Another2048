@@ -41,8 +41,6 @@ void ABlock::BeginPlay()
 		TArray<AActor*> ScoreboardFound;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AScoreboard::StaticClass(), ScoreboardFound);
 
-		UE_LOG(LogTemp, Warning, TEXT("Scoreboard count: %d"), ScoreboardFound.Num());
-
 		// If too few/many Scoreboards in the scene, return and give a warning
 		if (!ensureMsgf(!(ScoreboardFound.Num() < 1), TEXT("No Scoreboard found in the scene!")) ||
 			!ensureMsgf(!(ScoreboardFound.Num() > 1), TEXT("Too many Scoreboards found in the scene!"))) { return; }
